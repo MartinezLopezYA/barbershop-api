@@ -7,11 +7,6 @@ from app.utils.database_utils import create_tables_if_not_exists
 
 app = FastAPI()
 
-@app.on_event("startup")
-async def startup_event():
-    await create_tables_if_not_exists()
-    print("Tareas de inicio completadas (creación de tablas).")
-
 @app.get("/test-db")
 async def test_database(db: AsyncSession = Depends(get_db)):
     return {"message": "Conexión a la base de datos asíncrona exitosa"}
