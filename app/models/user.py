@@ -19,4 +19,5 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
-    roles = relationship("Role", secondary="user_roles", back_populates="users")
+    roles = relationship("Role", secondary="user_roles", back_populates="users", overlaps="user_roles")
+    user_roles = relationship("UserRole", back_populates="user", overlaps="roles")

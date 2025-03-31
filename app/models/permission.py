@@ -11,4 +11,5 @@ class Permission(Base):
     permissionname = Column(String(50), unique=True, index=True, nullable=False)
     permissiondesc = Column(String(80), nullable=True)
 
-    roles = relationship("Role", secondary="role_permissions", back_populates="permissions")
+    roles = relationship("Role", secondary="role_permissions", back_populates="permissions", overlaps="role_permissions")
+    role_permissions = relationship("RolePermission", back_populates="permission", overlaps="permissions")

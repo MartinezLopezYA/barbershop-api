@@ -4,10 +4,10 @@ from sqlalchemy.orm import relationship
 from app.database.database import Base
 
 class RolePermission(Base):
-    __tablename__ = "role_permission"
+    __tablename__ = "role_permissions"
 
     roluuid = Column(UUID(as_uuid=True), ForeignKey("roles.roluuid"), primary_key=True)
     permissionuuid = Column(UUID(as_uuid=True), ForeignKey("permissions.permissionuuid"), primary_key=True)
 
-    role = relationship("Role", backref="role_permissions")
-    permission = relationship("Permission", backref="role_permissions")
+    role = relationship("Role", back_populates="role_permissions", overlaps="permissions,roles")
+    permission = relationship("Permission", back_populates="role_permissions", overlaps="permissions,roles")

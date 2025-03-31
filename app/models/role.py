@@ -12,5 +12,7 @@ class Role(Base):
     roldesc = Column(String(80), nullable=True)
     rolstatus = Column(Boolean, default=True)
 
-    users = relationship("User", secondary="user_roles", back_populates="roles")
     permissions = relationship("Permission", secondary="role_permissions", back_populates="roles")
+    users = relationship("User", secondary="user_roles", back_populates="roles", overlaps="user_roles")
+    user_roles = relationship("UserRole", back_populates="role", overlaps="users")
+    role_permissions = relationship("RolePermission", back_populates="role", overlaps="permissions")

@@ -1,16 +1,20 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from uuid import UUID
-from typing import List
-from .role import Role
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .role import Role
+else:
+    Role = None
 
 class UserBase(BaseModel):
-    username: str
-    useremail: str
-    userfirstname: str
-    userlastname: str
-    userphone: str | None
-    userstatus: bool = True
+    username: str = Field(..., example="johndoe")
+    useremail: str = Field(..., example="johndoe@gmail.com")
+    userfirstname: str = Field(..., example="John")
+    userlastname: str = Field(..., example="Doe")
+    userphone: Optional[str] = Field(..., example="3212346789")
+    userstatus: bool = Field(..., example=True)
 
 class UserCreate(UserBase):
     userpass: str
@@ -21,14 +25,14 @@ class UserUpdate(UserBase):
 class UserInDBBase(UserBase):
     useruuid: UUID
     created_at: datetime
-    updated_at: datetime | None = None
+    updated_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
-    
+    model_config = {"from_attributes": True}
+
 class User(UserInDBBase):
-    roles: List[Role] = []
+    roles: List["Role"] = []
+User.model_rebuild()
 
 class UserSearchResults(BaseModel):
     count: int
-    results: list[User]
+    results: List[User]

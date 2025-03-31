@@ -1,11 +1,12 @@
 from pydantic import BaseModel
 from uuid import UUID
-from typing import List
-from .role import Role
+from typing import List, Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from .role import Role
 
 class PermissionBase(BaseModel):
     permissionname: str
-    permissiondesc: str | None = None
+    permissiondesc: Optional[str] = None
 
 class PermissionCreate(PermissionBase):
     pass
@@ -16,12 +17,11 @@ class PermissionUpdate(PermissionBase):
 class PermissionInDBBase(PermissionBase):
     permissionuuid: UUID
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 class Permission(PermissionInDBBase):
-    roles: List[Role] = []
+    roles: List["Role"] = []
 
 class PermissionSearchResults(BaseModel):
     count: int
-    results: list[Permission]
+    results: List[Permission]

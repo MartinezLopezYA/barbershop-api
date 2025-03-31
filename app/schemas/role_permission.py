@@ -8,5 +8,4 @@ class RolePermission(BaseModel):
     roluuid: UUID
     permissionuuid: UUID
 
-    class Config: 
-        orm_mode = True
+    model_config = {"from_attributes": True}

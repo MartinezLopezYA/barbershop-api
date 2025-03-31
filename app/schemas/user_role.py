@@ -8,5 +8,4 @@ class UserRole(BaseModel):
     useruuid: UUID
     roluuid: UUID
 
-    class Config:
-        orm_mode = True 
+    model_config = {"from_attributes": True}
