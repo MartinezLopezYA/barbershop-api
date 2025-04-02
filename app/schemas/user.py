@@ -18,6 +18,9 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     userpass: str
+    roles: Optional[List[UUID]] = None
+    
+    model_config = {"from_attributes": True}
 
 class UserUpdate(UserBase):
     pass
@@ -26,11 +29,18 @@ class UserInDBBase(UserBase):
     useruuid: UUID
     created_at: datetime
     updated_at: Optional[datetime] = None
+    roles: Optional[List[UUID]] = None 
+    
+    class Config:
+        from_attributes = True
 
+    #model_config = {"from_attributes": True}
+
+class User(UserCreate):
+    roles: Optional[List[UUID]] = None
+    
     model_config = {"from_attributes": True}
-
-class User(UserInDBBase):
-    roles: List["Role"] = []
+    
 User.model_rebuild()
 
 class UserSearchResults(BaseModel):

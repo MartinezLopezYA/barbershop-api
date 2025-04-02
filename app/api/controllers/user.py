@@ -2,15 +2,20 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.database import get_db
 from typing import List
-from app.schemas import UserCreate, UserUpdate, User
+from app.schemas import UserCreate, UserUpdate, User,UserInDBBase
 from app.services import user
 
 user_router = APIRouter()
 
-@user_router.post("/create-user", response_model=User, description="Provide an endpoint to create a new user in database")
+@user_router.post("/create-user", response_model=UserInDBBase, description="Provide an endpoint to create a new user in database")
 async def create_user(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
     try:
-        return await user.create_user(db=db, user_in=user_in)
+        # Convertir UserCreate a User
+        """user_data = user_in.model_dump()
+        user_obj = User(**user_data)  # Inicialmente sin roles
+        return await user.create_user(db=db, user_in=user_obj)"""
+        db_user = await user.create_user(db=db, user_in=user_in)
+        return db_user
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     

@@ -23,7 +23,6 @@ target_metadata = Base.metadata
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = settings.DATABASE_URL
-    print(f"Running migrations offline with URL: {url}")
     context.configure(
         url=str(url), target_metadata=target_metadata, literal_binds=True, dialect_opts={"paramstyle": "named"}
     )
@@ -33,7 +32,6 @@ def run_migrations_offline() -> None:
 async def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     connectable = create_async_engine(str(settings.DATABASE_URL))
-    print(f"Running migrations online with URL: {settings.DATABASE_URL}")
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
     await connectable.dispose()
